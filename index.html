@@ -489,6 +489,23 @@
         }
         #knightSecretClose:hover { border-color: #ff1764; }
 
+        /* Prevent hidden overlay controls from ever appearing on the chemistry landing page. */
+        #chemistryLesson:not(.open),
+        #secretImageOverlay:not(.open),
+        #atomSecretOverlay:not(.open),
+        #knightSecretOverlay:not(.open) {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        #chemistryLesson.open,
+        #secretImageOverlay.open,
+        #atomSecretOverlay.open,
+        #knightSecretOverlay.open {
+            visibility: visible;
+        }
+
         /* Keep the Chemistry4Fun logo clickable above the lesson modal. */
         body.atoms-lesson-open #siteLogo,
         body.elements-lesson-open #siteLogo {
@@ -560,7 +577,7 @@
                 <div class="chemistry-topic" tabindex="0" role="button" data-topic="atoms" onclick="openChemistryLesson('atoms')">
                     <strong>Atoms</strong>
                     <span>Atoms are the basic units of matter. They contain a nucleus surrounded by electrons.</span>
-                </div>x
+                </div>
                 <div class="chemistry-topic" tabindex="0" role="button" data-topic="elements" onclick="openChemistryLesson('elements')">
                     <strong>Elements</strong>
                     <span>An element is a pure substance made from one type of atom. The periodic table organizes the known elements.</span>
@@ -1064,7 +1081,6 @@
             modal.classList.add('open');
             modal.setAttribute('aria-hidden','false');
             document.body.style.overflow = 'hidden';
-            document.body.classList.remove('games-mode');
             document.body.classList.toggle('atoms-lesson-open', topic === 'atoms');
             document.body.classList.toggle('elements-lesson-open', topic === 'elements');
             // Preload the Roaring Knight page in the background while the Elements lesson is open.
@@ -1139,7 +1155,7 @@
         // 5 clicks from the chemistry page opens Games.
         // While already on Games, 10 clicks opens the existing secret image.
         // While the Atoms lesson is open, 10 clicks opens the animated atom secret.
-        // While the Elements lesson is open, 20 clicks opens the Roaring Knight game full-screen.
+        // While the Elements lesson is open, 10 clicks opens the Roaring Knight game full-screen.
         (function () {
             const logo = document.getElementById('siteLogo');
             const overlay = document.getElementById('secretImageOverlay');
@@ -1216,13 +1232,13 @@
                     return;
                 }
 
-                if (!onGamesPage && !onAtomsPage && !onElementsPage && clicks >= 5) {
+                if (!onGamesPage && !onAtomsPage && clicks >= 5) {
                     document.body.classList.add('games-mode');
                     resetClicks();
                     return;
                 }
 
-                if (onGamesPage && !onElementsPage && clicks >= 10) {
+                if (onGamesPage && clicks >= 10) {
                     overlay.classList.add('open');
                     overlay.setAttribute('aria-hidden', 'false');
                     resetClicks();
